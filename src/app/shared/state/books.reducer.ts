@@ -21,7 +21,10 @@ const initialState: State = {
   activeBookId: null
 }
 
-export const booksPageReducers = createReducer(
+/**
+ * we can export this function directly for ivy compilers v10+
+ */
+const booksPageReducers = createReducer(
   initialState,
   on(
     BookPageActions.enterBookPage,
@@ -41,5 +44,55 @@ export const booksPageReducers = createReducer(
         activeBookId: action.bookId
       }
     }
-  )
+  ),
+  on(BooksApiActions.booksLoaded, (state, action) => {
+    return {
+      ...state,
+      collection: action.books
+    };
+  }),
+  on(BooksApiActions.bookCreated, (state, action) => {
+    return {
+      collection: createBook(state.collection, action.book),
+      activeBookId: null
+    };
+  }),
+  on(BooksApiActions.bookUpdated, (state, action) => {
+    return {
+      collection: updateBook(state.collection, action.book),
+      activeBookId: null
+    };
+  }),
+  on(BooksApiActions.bookDeleted, (state, action) => {
+    return {
+      ...state,
+      collection: deleteBook(state.collection, action.bookId)
+    };
+  })
 );
+
+/**
+ * For non-ivy env. we need to wrap the method in AOT-compatible wrapper function and export our reducer.
+ * This can be omitted with v10 and above
+ */
+export function reducer(state: State | undefined, action: Action) {
+  return booksPageReducers(state, action);
+}
+
+const selectAll = (state: State) => state.collection;
+const selectActiveBookId = (state: State) => state.activeBookId;
+
+const selectActiveBook = createSelector(
+  selectAll,
+  selectActiveBookId,
+  (books, activeBookId) => books.find(book => book.id === activeBookId) || null
+);
+const selectEarningsTotals = createSelector(
+  selectAll,
+  calculateBooksGrossEarnings
+);
+
+export const BooksSelector = {
+  selectActiveBook,
+  selectEarningsTotals
+};
