@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
-import { timer, Observable, throwError } from "rxjs";
-import { map } from "rxjs/operators";
+import { timer, Observable, throwError, map } from "rxjs";
 import { v4 as uuid } from 'uuid';
 import { UserModel } from "../models/user.model";
 

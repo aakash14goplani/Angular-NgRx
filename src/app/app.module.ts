@@ -22,7 +22,7 @@ import { AppComponent } from "./app.component";
       { path: "", pathMatch: "full", redirectTo: "/books" }
     ]),
     StoreModule.forRoot(reducers, { metaReducers }),
-    StoreDevtoolsModule.instrument({ maxAge: 5 }),
+    StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),
     MaterialModule,
     AuthModule,
