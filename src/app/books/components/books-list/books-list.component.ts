@@ -7,7 +7,7 @@ import { BookModel } from "src/app/shared/models";
   styleUrls: ["./books-list.component.css"]
 })
 export class BooksListComponent {
-  @Input() books!: BookModel[];
+  @Input() books!: BookModel[] | null;
   @Input() readonly = false;
   @Output() select = new EventEmitter();
   @Output() delete = new EventEmitter();

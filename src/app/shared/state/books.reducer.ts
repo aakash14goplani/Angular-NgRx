@@ -11,12 +11,12 @@ const updateBook = (books: BookModel[], changes: BookModel) =>
 const deleteBook = (books: BookModel[], bookId: string) =>
   books.filter(book => bookId !== book.id);
 
-export interface State {
+export interface BooksState {
   collection: BookModel[];
   activeBookId: string | null;
 }
 
-const initialState: State = {
+const initialState: BooksState = {
   collection: [],
   activeBookId: null
 }
@@ -75,24 +75,19 @@ const booksPageReducers = createReducer(
  * For non-ivy env. we need to wrap the method in AOT-compatible wrapper function and export our reducer.
  * This can be omitted with v10 and above
  */
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: BooksState | undefined, action: Action) {
   return booksPageReducers(state, action);
 }
 
-const selectAll = (state: State) => state.collection;
-const selectActiveBookId = (state: State) => state.activeBookId;
+export const selectAll = (state: BooksState) => state.collection;
+export const selectActiveBookId = (state: BooksState) => state.activeBookId;
 
-const selectActiveBook = createSelector(
+export const selectActiveBook = createSelector(
   selectAll,
   selectActiveBookId,
-  (books, activeBookId) => books.find(book => book.id === activeBookId) || null
+  (books, activeBookId) => books.filter(book => book.id === activeBookId)[0] || null
 );
-const selectEarningsTotals = createSelector(
+export const selectEarningsTotals = createSelector(
   selectAll,
   calculateBooksGrossEarnings
 );
-
-export const BooksSelector = {
-  selectActiveBook,
-  selectEarningsTotals
-};

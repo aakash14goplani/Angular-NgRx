@@ -6,5 +6,5 @@ import { Component, Input } from "@angular/core";
   styleUrls: ["./books-total.component.css"]
 })
 export class BooksTotalComponent {
-  @Input() total!: number;
+  @Input() total!: number | null;
 }
