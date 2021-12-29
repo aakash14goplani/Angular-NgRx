@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import { BookModel } from "src/app/shared/models";
 
 @Component({
   selector: "app-book-detail",
   templateUrl: "./book-detail.component.html",
-  styleUrls: ["./book-detail.component.css"]
+  styleUrls: ["./book-detail.component.css"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookDetailComponent {
   originalBook: BookModel | undefined;
