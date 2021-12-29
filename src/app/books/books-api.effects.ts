@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { createEffect, Actions, ofType } from "@ngrx/effects";
-import { catchError, EMPTY, Observable, of, switchMap } from "rxjs";
+import { catchError, concatMap, EMPTY, exhaustMap, map, mergeMap, Observable, of } from "rxjs";
 import { BooksService } from "../shared/services";
 import BookApiActions from "./actions/books-api.actions";
 import BooksPageActions from "./actions/books-page.actions";
@@ -15,34 +15,37 @@ export class BooksApiEffects {
 
   getAllBooks$ = createEffect(() => this.actions$.pipe(
     ofType(BooksPageActions.enterBookPage),
-    switchMap(_ => this.booksService.all()),
-    switchMap(books => of(BookApiActions.booksLoaded({ books }))),
+    exhaustMap(_ => this.booksService.all().pipe(
+      map(books => BookApiActions.booksLoaded({ books }))
+    )),
     catchError(error => this.handleError(error))
   ));
 
   createBook$ = createEffect(() => this.actions$.pipe(
     ofType(BooksPageActions.createBook),
-    switchMap(action => this.booksService.create(action.book)),
-    switchMap(book => {
-      const actions = [];
-      actions.push(BooksPageActions.cancelBookEdit());
-      actions.push(BookApiActions.bookCreated({ book }));
-      return of(...actions);
-    }),
+    concatMap(action => this.booksService.create(action.book).pipe(
+      mergeMap(book => {
+        const actions = [];
+        actions.push(BooksPageActions.cancelBookEdit());
+        actions.push(BookApiActions.bookCreated({ book }));
+        return of(...actions);
+      })
+    )),
     catchError(error => this.handleError(error))
   ));
 
   updateBook$ = createEffect(() => this.actions$.pipe(
     ofType(BooksPageActions.updateBook),
-    switchMap(action => this.booksService.update(action.bookId, action.book)),
-    switchMap(book => of(BookApiActions.bookUpdated({ book }))),
+    concatMap(action => this.booksService.update(action.bookId, action.book).pipe(
+      map(book => BookApiActions.bookUpdated({ book }))
+    )),
     catchError(error => this.handleError(error))
   ));
 
   deleteBook$ = createEffect(() => this.actions$.pipe(
     ofType(BooksPageActions.deleteBook),
-    switchMap(action => this.booksService.delete(action.bookId).pipe(
-      switchMap(_ => {
+    mergeMap(action => this.booksService.delete(action.bookId).pipe(
+      mergeMap(_ => {
         const actions = [];
         actions.push(BooksPageActions.cancelBookEdit());
         actions.push(BookApiActions.bookDeleted({ bookId: action.bookId }));
