@@ -1,13 +1,16 @@
-import { Action, ActionReducer, ActionReducerMap, createSelector, MetaReducer } from "@ngrx/store";
+import { Action, ActionReducer, ActionReducerMap, createFeatureSelector, createSelector, MetaReducer } from "@ngrx/store";
 import * as fromAuth from "./auth.reducer";
 import * as fromBooks from "./books.reducer";
+import { logoutMetareducer } from "./logout.metareducer";
 
 export interface State {
-  books: fromBooks.BooksState
+  books: fromBooks.BooksState,
+  auth: fromAuth.UserState
 }
 
 export const reducers: ActionReducerMap<State> = {
-  books: fromBooks.reducer
+  books: fromBooks.reducer,
+  auth: fromAuth.authReducer
 };
 
 function logger(reducer: ActionReducer<any, any>) {
@@ -23,7 +26,7 @@ function logger(reducer: ActionReducer<any, any>) {
   }
 }
 
-export const metaReducers: MetaReducer<any, any>[] = [logger];
+export const metaReducers: MetaReducer<any, any>[] = [logger, logoutMetareducer];
 
 const selectBooksState = (state: State) => state.books;
 const selectAllBooks = createSelector(
@@ -39,8 +42,29 @@ const selectBooksEarningsTotals = createSelector(
   fromBooks.selectEarningsTotals
 );
 
+// const selectAuthState = (state: State) => state.auth;
+const selectAuthState = createFeatureSelector<fromAuth.UserState>('auth');
+const selectGettingAuthStatus = createSelector(
+  selectAuthState,
+  fromAuth.selectGettingStatus
+);
+const selectAuthUser = createSelector(
+  selectAuthState,
+  fromAuth.selectUser
+);
+const selectAuthError = createSelector(
+  selectAuthState,
+  fromAuth.selectError
+);
+
 export const BooksSelectors = {
   selectAllBooks,
   selectActiveBook,
   selectBooksEarningsTotals
+};
+
+export const AuthSelectors = {
+  selectGettingAuthStatus,
+  selectAuthUser,
+  selectAuthError
 };

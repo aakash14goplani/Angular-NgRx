@@ -9,8 +9,8 @@
 
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" class="app-sidenav">
-    <app-user></app-user>
-    <nav>
+    <app-user [user]="user$"></app-user>
+    <nav *ngIf="user$ | async as user">
       <a
         mat-button
         class="nav-link"

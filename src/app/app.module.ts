@@ -11,6 +11,9 @@ import { reducers, metaReducers } from "./shared/state";
 import { AuthModule } from "./auth";
 import { BooksModule } from "./books";
 import { AppComponent } from "./app.component";
+import { StoreRouterConnectingModule } from "@ngrx/router-store";
+import { environment } from "src/environments/environment";
+import { RouterEffects } from "./shared/state/router.effects";
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,8 +25,9 @@ import { AppComponent } from "./app.component";
       { path: "", pathMatch: "full", redirectTo: "/books" }
     ]),
     StoreModule.forRoot(reducers, { metaReducers }),
-    StoreDevtoolsModule.instrument({ maxAge: 25 }),
-    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    EffectsModule.forRoot([RouterEffects]),
+    StoreRouterConnectingModule.forRoot(),
     MaterialModule,
     AuthModule,
     BooksModule
