@@ -3,19 +3,8 @@ import { BookModel, calculateBooksGrossEarnings } from "src/app/shared/models";
 import BookPageActions from "src/app/books/actions/books-page.actions";
 import BooksApiActions from "src/app/books/actions/books-api.actions";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
-
-/* const createBook = (books: BookModel[], book: BookModel) => [...books, book];
-const updateBook = (books: BookModel[], changes: BookModel) =>
-  books.map(book => {
-    return book.id === changes.id ? Object.assign({}, book, changes) : book;
-  });
-const deleteBook = (books: BookModel[], bookId: string) =>
-  books.filter(book => bookId !== book.id);
-
-export interface BooksState {
-  collection: BookModel[];
-  activeBookId: string | null;
-} */
+import { Draft } from "immer";
+import produceOn from "./reducer-helper-function";
 
 export interface BooksState extends EntityState<BookModel> {
   // collection: BookModel[]; -> no need as this will be managed by Entity data strcture
@@ -39,60 +28,63 @@ const initialState: BooksState = adapter.getInitialState({
  */
 const booksPageReducers = createReducer(
   initialState,
-  on(
+  produceOn(
     BookPageActions.enterBookPage,
-    BookPageActions.cancelBookEdit,
-    (state, action) => {
+    (draft: Draft<BooksState>) => {
       return {
-        ...state,
+        ...draft,
         activeBookId: null
       }
     }
   ),
-  on(
-    BookPageActions.selectBook,
-    (state, action) => {
+  produceOn(
+    BookPageActions.cancelBookEdit,
+    (draft: Draft<BooksState>) => {
       return {
-        ...state,
-        activeBookId: action.bookId
+        ...draft,
+        activeBookId: null
       }
     }
   ),
-  on(BooksApiActions.booksLoaded, (state, action) => {
-    /* return {
-      ...state,
-      collection: action.books
-    }; */
-    return adapter.addMany(action.books, state);
-  }),
-  on(BooksApiActions.bookCreated, (state, action) => {
-    // return adapter.addOne(action.book, state); -> this should have been sufficient but we need additional param as well
-    return adapter.addOne(action.book, {
-      ...state,
-      activeBookId: null
-    });
-    /* return {
-      collection: createBook(state.collection, action.book),
-      activeBookId: null
-    }; */
-  }),
-  on(BooksApiActions.bookUpdated, (state, action) => {
-    return adapter.updateOne({ id: action.book.id, changes: action.book }, {
-      ...state,
-      activeBookId: null
-    });
-    /* return {
-      collection: updateBook(state.collection, action.book),
-      activeBookId: null
-    }; */
-  }),
-  on(BooksApiActions.bookDeleted, (state, action) => {
-    return adapter.removeOne(action.bookId, state);
-    /* return {
-      ...state,
-      collection: deleteBook(state.collection, action.bookId)
-    }; */
-  })
+  produceOn(
+    BookPageActions.selectBook,
+    (draft: Draft<BooksState>, { bookId }) => {
+      return {
+        ...draft,
+        activeBookId: bookId
+      }
+    }
+  ),
+  produceOn(
+    BooksApiActions.booksLoaded,
+    (draft: Draft<BooksState>, { books }) => {
+      return adapter.addMany(books, draft);
+    }
+  ),
+  produceOn(
+    BooksApiActions.bookCreated,
+    (draft: Draft<BooksState>, { book }) => {
+      return adapter.addOne(book, {
+        ...draft,
+        activeBookId: null
+      });
+    }
+  ),
+  produceOn(
+    BooksApiActions.bookUpdated,
+    (draft: Draft<BooksState>, { book }) => {
+      return adapter.updateOne({ id: book.id, changes: book }, {
+        ...draft,
+        activeBookId: null
+      });
+    }
+  ),
+  produceOn(
+    BooksApiActions.bookDeleted,
+    (draft: Draft<BooksState>, { bookId }) => {
+      return adapter.removeOne(bookId, draft);
+    }
+  )
 );
 
 /**

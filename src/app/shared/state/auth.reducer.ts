@@ -1,7 +1,9 @@
 import { UserModel } from "../models";
-import { createReducer, on } from "@ngrx/store";
+import { createReducer } from "@ngrx/store";
 import AuthApiActions from "src/app/auth/actions/auth-api.actions";
 import AuthUserActions from "src/app/auth/actions/auth-user.actions";
+import produceOn from "./reducer-helper-function";
+import { Draft } from "immer";
 
 export interface UserState {
   user: UserModel | null;
@@ -17,47 +19,61 @@ const initialState: UserState = {
 
 export const authReducer = createReducer(
   initialState,
-  on(
+  produceOn(
     AuthUserActions.loginUser,
-    (state, action) => {
+    (draft: Draft<UserState>, { username, password }) => {
       return {
+        ...draft,
         gettingStatus: true,
         user: null,
         error: null
       }
     }
   ),
-  on(
+  produceOn(
     AuthUserActions.logoutUser,
-    (state, action) => {
+    (draft: Draft<UserState>) => {
       return {
+        ...draft,
         user: null,
         gettingStatus: false,
         error: null
       }
     }
   ),
-  on(AuthApiActions.getAuthStatusSuccess, (state, action) => {
-    return {
-      gettingStatus: false,
-      user: action.user,
-      error: null
-    };
-  }),
-  on(AuthApiActions.loginSuccess, (state, action) => {
-    return {
-      gettingStatus: false,
-      user: action.user,
-      error: null
-    };
-  }),
-  on(AuthApiActions.loginFailure, (state, action) => {
-    return {
-      gettingStatus: false,
-      user: null,
-      error: action.reason
-    };
-  })
+  produceOn(
+    AuthApiActions.getAuthStatusSuccess,
+    (draft: Draft<UserState>, { user }) => {
+      return {
+        ...draft,
+        user,
+        gettingStatus: false,
+        error: null
+      }
+    }
+  ),
+  produceOn(
+    AuthApiActions.loginSuccess,
+    (draft: Draft<UserState>, { user }) => {
+      return {
+        ...draft,
+        user,
+        gettingStatus: false,
+        error: null
+      }
+    }
+  ),
+  produceOn(
+    AuthApiActions.loginFailure,
+    (draft: Draft<UserState>, { reason }) => {
+      return {
+        ...draft,
+        user: null,
+        gettingStatus: false,
+        error: reason
+      }
+    }
+  )
 );
 
 export const selectGettingStatus = (state: UserState) => state.gettingStatus;

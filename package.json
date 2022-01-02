@@ -6,13 +6,7 @@
     "start": "concurrently \"npm run server\" \"ng serve\"",
     "server": "json-server db.json --watch",
     "build": "ng build",
-    "test": "jest"
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupJest.ts"
-    ]
+    "test": "ng test --no-watch --browsers=ChromeHeadlessNoSandbox --source-map=false"
   },
   "private": true,
   "dependencies": {
@@ -45,14 +39,11 @@
     "@angular/cli": "~13.1.2",
     "@angular/compiler-cli": "~13.1.0",
     "@types/jasmine": "~3.10.0",
-    "@types/jest": "^27.0.3",
     "@types/node": "^12.11.1",
     "@types/uuid": "^8.3.3",
     "codelyzer": "^6.0.2",
     "concurrently": "^6.5.1",
     "jasmine-core": "~3.10.0",
-    "jest": "^27.4.5",
-    "jest-preset-angular": "^11.0.1",
     "json-server": "^0.17.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
