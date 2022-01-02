@@ -36,6 +36,8 @@ export class AuthService {
   }
 
   logout() {
+    sessionStorage.removeItem('books');
+    sessionStorage.removeItem('auth');
     localStorage.removeItem('auth');
   }
 }

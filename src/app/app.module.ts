@@ -34,4 +34,4 @@ import { RouterEffects } from './shared/state/router.effects';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,6 +1,7 @@
-import { Action, ActionReducer, ActionReducerMap, createFeatureSelector, createSelector, MetaReducer } from '@ngrx/store';
+import { ActionReducerMap, createFeatureSelector, createSelector, MetaReducer } from '@ngrx/store';
 import * as fromAuth from './auth.reducer';
 import * as fromBooks from './books.reducer';
+import { localStorageSyncReducer } from './local-storage.metareducer';
 import { logoutMetareducer } from './logout.metareducer';
 
 export interface State {
@@ -13,20 +14,7 @@ export const reducers: ActionReducerMap<State> = {
   auth: fromAuth.authReducer
 };
 
-function logger(reducer: ActionReducer<any, any>) {
-  return (state: State, action: Action) => {
-    console.debug('sss Previous state: ', state);
-    console.debug('sss Next Actione: ', action);
-
-    const nextState = reducer(state, action);
-
-    console.debug('sss Next state: ', nextState);
-
-    return nextState;
-  };
-}
-
-export const metaReducers: MetaReducer<any, any>[] = [logger, logoutMetareducer];
+export const metaReducers: MetaReducer<any, any>[] = [localStorageSyncReducer, logoutMetareducer];
 
 const selectBooksState = (state: State) => state.books;
 const selectAllBooks = createSelector(
