@@ -1,15 +1,15 @@
-import { Component } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { Store } from "@ngrx/store";
-import { UserModel } from "src/app/shared/models";
-import { LoginEvent } from "../login-form";
-import AuthUserActions from "../../actions/auth-user.actions";
-import { AuthSelectors, State } from "src/app/shared/state";
+import { Component } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { UserModel } from 'src/app/shared/models';
+import { LoginEvent } from '../login-form';
+import AuthUserActions from '../../actions/auth-user.actions';
+import { AuthSelectors, State } from 'src/app/shared/state';
 
 @Component({
-  selector: "app-login-page",
-  templateUrl: "./login-page.component.html",
-  styleUrls: ["./login-page.component.css"]
+  selector: 'app-login-page',
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent {
   gettingStatus$: Observable<boolean>;

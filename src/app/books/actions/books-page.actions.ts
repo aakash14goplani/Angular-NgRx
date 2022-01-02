@@ -1,5 +1,5 @@
-import { createAction, props } from "@ngrx/store";
-import { BookRequiredProps } from "src/app/shared/models";
+import { createAction, props } from '@ngrx/store';
+import { BookRequiredProps } from 'src/app/shared/models';
 
 enum BookPageActionTypes {
   CREATE = '[BOOKS PAGE] CREATE A BOOK',

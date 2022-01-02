@@ -1,4 +1,4 @@
-import { createAction } from "@ngrx/store";
+import { createAction } from '@ngrx/store';
 
 enum AuthUserActionTypes {
   LOGIN = '[Auth] User Login',

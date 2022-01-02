@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import { FormGroup, FormControl } from "@angular/forms";
-import { BookModel } from "src/app/shared/models";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+import { BookModel } from 'src/app/shared/models';
 
 @Component({
-  selector: "app-book-detail",
-  templateUrl: "./book-detail.component.html",
-  styleUrls: ["./book-detail.component.css"],
+  selector: 'app-book-detail',
+  templateUrl: './book-detail.component.html',
+  styleUrls: ['./book-detail.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookDetailComponent {
@@ -14,9 +14,9 @@ export class BookDetailComponent {
   @Output() cancel = new EventEmitter();
 
   bookForm = new FormGroup({
-    name: new FormControl(""),
+    name: new FormControl(''),
     earnings: new FormControl(0),
-    description: new FormControl("")
+    description: new FormControl('')
   });
 
   @Input() set book(book: BookModel | null) {

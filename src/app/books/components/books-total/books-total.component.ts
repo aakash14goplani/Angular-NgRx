@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-  selector: "app-books-total",
-  templateUrl: "./books-total.component.html",
-  styleUrls: ["./books-total.component.css"],
+  selector: 'app-books-total',
+  templateUrl: './books-total.component.html',
+  styleUrls: ['./books-total.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BooksTotalComponent {

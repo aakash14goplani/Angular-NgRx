@@ -1,5 +1,5 @@
-import { ActionReducer, Action } from "@ngrx/store";
-import AuthUserActions from "src/app/auth/actions/auth-user.actions";
+import { ActionReducer, Action } from '@ngrx/store';
+import AuthUserActions from 'src/app/auth/actions/auth-user.actions';
 
 export function logoutMetareducer(reducer: ActionReducer<any>) {
   return function(state: any, action: Action) {

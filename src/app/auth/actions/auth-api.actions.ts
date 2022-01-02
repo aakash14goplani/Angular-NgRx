@@ -1,5 +1,5 @@
-import { createAction } from "@ngrx/store";
-import { UserModel } from "src/app/shared/models";
+import { createAction } from '@ngrx/store';
+import { UserModel } from 'src/app/shared/models';
 
 enum AuthApiActionTypes {
   getAuthStatusSuccess = '[Auth/API] Get Auth Status Success',

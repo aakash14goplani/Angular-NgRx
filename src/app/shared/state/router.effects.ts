@@ -1,9 +1,9 @@
-import { Location } from "@angular/common";
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { map, tap } from "rxjs";
-import { RouterActions } from "./router.actions";
+import { Location } from '@angular/common';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { map, tap } from 'rxjs';
+import { RouterActions } from './router.actions';
 
 @Injectable()
 export class RouterEffects {
@@ -20,10 +20,9 @@ export class RouterEffects {
     })
   ), { dispatch: false });
 
-  navigateBack$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(RouterActions.Back),
-      tap(() => this.location.back())
-    ), { dispatch: false }
+  navigateBack$ = createEffect(() => this.actions$.pipe(
+    ofType(RouterActions.Back),
+    tap(() => this.location.back())
+  ), { dispatch: false }
   );
 }

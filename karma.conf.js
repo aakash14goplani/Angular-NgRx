@@ -27,11 +27,11 @@ module.exports = function (config) {
     },
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/ngrx-practice'),
-      subdir: '.',
       reporters: [
         { type: 'html' },
-        { type: 'text-summary' }
-      ]
+        { type: 'text-summary', subdir: 'coverage-report-html' }
+      ],
+      fixedWepackSourcePaths: true
     },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
@@ -42,10 +42,11 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--proxy-bypass-list=*', '--disable-gpu']
+        flags: ['--no-sandbox', '--remote-debugging-port=9222', '--disable-gpu']
       }
     },
     singleRun: false,
-    restartOnFileChange: true
+    restartOnFileChange: true,
+    concurrency: Infinity
   });
 };

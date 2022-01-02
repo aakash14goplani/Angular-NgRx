@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { BookModel, BookRequiredProps } from "src/app/shared/models";
-import { BooksSelectors, State } from "src/app/shared/state";
-import BookPageActions from "../../actions/books-page.actions";
-import { Observable } from "rxjs";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { BookModel, BookRequiredProps } from 'src/app/shared/models';
+import { BooksSelectors, State } from 'src/app/shared/state';
+import BookPageActions from '../../actions/books-page.actions';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: "app-books",
-  templateUrl: "./books-page.component.html",
-  styleUrls: ["./books-page.component.css"],
+  selector: 'app-books',
+  templateUrl: './books-page.component.html',
+  styleUrls: ['./books-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BooksPageComponent implements OnInit {
@@ -39,7 +39,7 @@ export class BooksPageComponent implements OnInit {
   }
 
   onSave(book: BookRequiredProps | BookModel) {
-    if ("id" in book) {
+    if ('id' in book) {
       this.updateBook(book);
     } else {
       this.saveBook(book);
